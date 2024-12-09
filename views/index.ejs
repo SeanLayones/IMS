@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('head') %>
+ <!-- Include a partial for the head section -->
+
+<body>
+    <!-- NAVBAR -->
+    <nav>
+        <input type="checkbox" id="check">
+        <label for="check" class="checkbtn">
+            <i class="fas fa-bars"></i>
+        </label>
+        <label class="logo">Inventory Management System (IMS)<small>®</small></label>
+        <ul>
+            <li><a class="active" href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#items">Inventory</a></li>
+        </ul>
+    </nav>
+
+    <!-- Section with background image -->
+    <section>
+        <img class="section" src="img/bg.jpg" alt="">
+    </section>
+
+    <!-- About Section -->
+    <div class="about-section shrink" id="about">
+        <div class="inner-container box-shadow">
+            <h1>About Us<br>Inventory Management System (IMS)</h1>
+            <h2>Why Choose Our Inventory System?</h2>
+            <p class="text">"Efficiency at Every Turn: Our Inventory System is designed to empower businesses with seamless control over their stock...</p>
+        </div>
+    </div>
+
+    <!-- Login/Signup Form Section -->
+    <div class="flex-container" id="items">
+        <div class="flex-item-left"><img class="inventory" src="img/login.png" alt=""></div>
+        <div class="flex-item-right">
+            
+          <h1 class="inventory-heading">Inventory Items</h1>
+          <a href="javascript:void(0)" class="form button" onclick="openAddItemModal()">Add New Item</a>
+          <div class="table-container">
+            <table class="inventory-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% items.forEach(item => { %>
+                  <tr class="item">
+                    <td class="item-name"><%= item.name %></td>
+                    <td class="item-category"><%= item.category %></td>
+                    <td class="item-price">$<%= item.price %></td>
+                    <td class="item-quantity"><%= item.quantity %></td>
+                    <td class="item-actions">
+                      <a href="javascript:void(0)" class="edit-item-link" onclick="openEditModal('<%= item._id %>', '<%= item.name %>', '<%= item.category %>', <%= item.quantity %>, <%= item.price %>, '<%= item.description %>')">Edit</a>
+                      <form action="/items/delete/<%= item._id %>" method="POST" class="delete-form">
+                        <button type="submit" class="delete-button">Delete</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+
+
+        </div>
+    </div>
+
+   
+    <!-- CONTACT -->
+<div class="container2" id="contact">
+    <div class="innerwrap">
+    
+        <section class="section1 clearfix">
+            <div class="textcenter">
+                <span class="shtext">Contact Us</span>
+                <span class="seperator"></span>
+                <h1>CONTACT US</h1>
+            </div>
+        </section>
+    
+        <section class="section2 clearfix">
+            <div class="col2 column1 first">
+                <iframe class="location box-shadow" width="520" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" id="gmap_canvas" src="https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=%20Pinagtipunan%20circle%201475%20Malabon,%20Philippines%20malabon+(Barangay%20Potrero)&amp;t=&amp;z=16&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+            </div>
+            <div class="col2 column2 last">
+                <div class="sec2innercont">
+                    <div class="sec2addr">
+                        <p>Malabon City</p>
+                        <p><span class="collig">Phone :</span> +63 9123456789</p>
+                        <p><span class="collig">Email :</span> seanlayones@gmail.com</p>
+                        <p><span class="collig">Facebook :</span> <a href="https://www.facebook.com/seanjerome.layones"> Sean Jerome Layones</a></p>
+                    </div>
+                </div>
+                <div class="sec2contactform">
+                    <h3 class="sec2frmtitle">Send Message</h3>
+                    <form action="">
+                        <div class="clearfix">
+                            <input class="col2 first" type="text" placeholder="FirstName">
+                            <input class="col2 last" type="text" placeholder="LastName">
+                        </div>
+                        <div class="clearfix">
+                            <input  class="col2 first" type="Email" placeholder="Email">
+                            <input class="col2 last" type="text" placeholder="Contact Number">
+                        </div>
+                        <div class="clearfix">
+                            <textarea name="textarea" id="" cols="30" rows="7">Your message here...</textarea>
+                        </div>
+                        <div class="clearfix"><input type="submit" value="Send"></div>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+    
+    </div>
+</div>
+
+
+<!-- Modal for Adding Item -->
+<div id="addItemModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Add New Item</h2>
+    <form action="/items/add" method="POST">
+      <input type="text" name="name" placeholder="Name" required />
+      <input type="text" name="category" placeholder="Category" required />
+      <input type="number" name="quantity" placeholder="Quantity" required />
+      <input type="number" name="price" placeholder="Price" required />
+      <textarea name="description" placeholder="Description"></textarea>
+      <button type="submit">Add Item</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- Modal for Editing Item -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Edit Item</h2>
+    <form id="editItemForm" method="POST">
+      <input type="text" name="name" id="itemName" required />
+      <input type="text" name="category" id="itemCategory" required />
+      <input type="number" name="quantity" id="itemQuantity" required />
+      <input type="number" name="price" id="itemPrice" required />
+      <textarea name="description" id="itemDescription"></textarea>
+      <button type="submit">Update Item</button>
+    </form>
+  </div>
+</div>
+
+
+
+    <!-- Footer -->
+    <%- include ('footer') %>  <!-- Include footer partial -->
+    <!-- Back to top button -->
+    <button type="button" class="btn btn-danger btn-floating btn-lg" id="btn-back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    
+<!-- // Toggle between login and sign up forms -->
+<script>
+    function toggleForm() {
+        var loginForm = document.getElementById("login-form");
+        var signupForm = document.getElementById("signup-form");
+    
+        if (loginForm.style.display === "none") {
+        loginForm.style.display = "block";
+        signupForm.style.display = "none";
+        } else {
+        loginForm.style.display = "none";
+        signupForm.style.display = "block";
+        }
+    }
+    </script>
+    
+    <script>
+        //Get the button
+        let mybutton = document.getElementById("btn-back-to-top");
+    
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () {
+        scrollFunction();
+        };
+    
+        function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+        }
+        // When the user clicks on the button, scroll to the top of the document
+        mybutton.addEventListener("click", backToTop);
+    
+        function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+        }
+    </script>
+
+<script>
+  // Function to open the edit modal and populate it with the item data
+function openEditModal(itemId, itemName, itemCategory, itemQuantity, itemPrice, itemDescription) {
+  // Set the values of the form inputs in the modal
+  document.getElementById('itemName').value = itemName;
+  document.getElementById('itemCategory').value = itemCategory;
+  document.getElementById('itemQuantity').value = itemQuantity;
+  document.getElementById('itemPrice').value = itemPrice;
+  document.getElementById('itemDescription').value = itemDescription;
+  
+  // Set the action URL of the form to the correct edit endpoint
+  document.getElementById('editItemForm').action = '/items/edit/' + itemId;
+
+  // Display the modal
+  document.getElementById('editModal').style.display = 'block';
+}
+
+// Function to close the modal
+function closeEditModal() {
+  document.getElementById('editModal').style.display = 'none';
+}
+
+// Event listener for closing the modal when clicking the close button
+document.querySelector('.close-btn').addEventListener('click', closeEditModal);
+
+// Close modal if the user clicks outside the modal content
+window.onclick = function(event) {
+  if (event.target === document.getElementById('editModal')) {
+    closeEditModal();
+  }
+};
+// Function to open the add item modal
+function openAddItemModal() {
+  document.getElementById('addItemModal').style.display = 'block';
+}
+
+// Function to close the modal
+function closeAddItemModal() {
+  document.getElementById('addItemModal').style.display = 'none';
+}
+
+// Event listener for closing the modal when clicking the close button
+document.querySelector('.close-btn').addEventListener('click', closeAddItemModal);
+
+// Close modal if the user clicks outside the modal content
+window.onclick = function(event) {
+  if (event.target === document.getElementById('addItemModal')) {
+    closeAddItemModal();
+  }
+};
+
+</script>
+</body>
+</html>

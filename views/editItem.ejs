@@ -1,0 +1,9 @@
+<h1>Edit Item</h1>
+<form action="/items/edit/<%= item._id %>" method="POST">
+  <input type="text" name="name" value="<%= item.name %>" required />
+  <input type="text" name="category" value="<%= item.category %>" required />
+  <input type="number" name="quantity" value="<%= item.quantity %>" required />
+  <input type="number" name="price" value="<%= item.price %>" required />
+  <textarea name="description"><%= item.description %></textarea>
+  <button type="submit">Update Item</button>
+</form>
