@@ -41,48 +41,55 @@
           <img class="inventory img-fluid" src="img/login.png" alt="Inventory Image">
       </div>
       <div class="col-md-8 box-shadow">
-          <h1 class="inventory-heading mb-4">Inventory Items</h1>
-          <a href="javascript:void(0)" class="btn btn-success mb-3" onclick="openAddItemModal()">Add New Item</a>
-          <div class="table-container">
-              <table class="table table-striped table-bordered table-hover">
-                  <thead class="thead-dark">
-                      <tr>
-                          <th>Item ID</th>
-                          <th>Name</th>
-                          <th>Category</th>
-                          <th>Price</th>
-                          <th>Quantity</th>
-                          <th>Description</th>
-                          <th>Actions</th>
+        <h1 class="inventory-heading mb-4">Inventory Items</h1>
+        
+        <!-- Search bar -->
+        <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search items..." onkeyup="searchItems()">
+        </div>
+    
+        <a href="javascript:void(0)" class="btn btn-success mb-3" onclick="openAddItemModal()">Add New Item</a>
+    
+        <div class="table-container">
+            <table class="table table-striped table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Item ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="itemTableBody">
+                    <% items.forEach(item => { %>
+                        <tr class="item">
+                            <td class="item-idNumber"><%= item.idNumber %></td>
+                            <td class="item-name"><%= item.name %></td>
+                            <td class="item-category"><%= item.category %></td>
+                            <td class="item-price">$<%= item.price %></td>
+                            <td class="item-quantity"><%= item.quantity %></td>
+                            <td class="item-description"><%= item.description %></td>
+                            <td class="item-actions">
+                                <button class="btn btn-sm btn-info text-black" onclick="openViewModal('<%= item._id %>')">View</button>
+                                <a href="javascript:void(0)" class="btn btn-primary" onclick="openEditModal('<%= item._id %>', '<%= item.name %>', '<%= item.category %>', <%= item.quantity %>, <%= item.price %>, '<%= item.description %>')">Edit</a>
+                                <form action="/delete/<%= item._id %>" method="POST" class="delete-form" onsubmit="return confirmDelete()">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                     <!-- No data found row -->
+                      <tr id="noDataRow" style="display: none;">
+                        <td colspan="7" class="text-center">No data found!</td>
                       </tr>
-                  </thead>
-                  <tbody>
-                      <% items.forEach(item => { %>
-                          <tr class="item">
-                              <td class="item-idNumber"><%= item.idNumber %></td>
-                              <td class="item-name"><%= item.name %></td>
-                              <td class="item-category"><%= item.category %></td>
-                              <td class="item-price">$<%= item.price %></td>
-                              <td class="item-quantity"><%= item.quantity %></td>
-                              <td class="item-description"><%= item.description %></td>
-                              <td class="item-actions">
-                                  <button 
-                                    class="btn btn-sm btn-info text-black" 
-                                    onclick="openViewModal('<%= item._id %>')">
-                                    View
-                                  </button>
-                                  
-                                  <a href="javascript:void(0)" class="btn btn-primary" onclick="openEditModal('<%= item._id %>', '<%= item.name %>', '<%= item.category %>', <%= item.quantity %>, <%= item.price %>, '<%= item.description %>')">Edit</a>
-                                  <form action="/delete/<%= item._id %>" method="POST" class="delete-form" onsubmit="return confirmDelete()">
-                                      <button type="submit" class="btn btn-danger">Delete</button>
-                                  </form>
-                              </td>
-                          </tr>
-                      <% }) %>
-                  </tbody>
-              </table>
-          </div>
-      </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
   </div>
 </div>
 
@@ -187,7 +194,6 @@
     </script>
 
 <script>
-// Open and Close for Edit Modal
 // Open the edit modal and populate it with item data
 function openEditModal(itemId, itemName, itemCategory, itemQuantity, itemPrice, itemDescription) {
   // Set the values of the form inputs in the modal
@@ -233,6 +239,8 @@ async function openViewModal(itemId) {
     console.log('Fetched Item Details:', item);  // For debugging
 
     // Populate the modal with the item details
+    document.getElementById('viewItemID').innerText = item._id;
+    document.getElementById('viewItemIDnum').innerText = item.idNumber;
     document.getElementById('viewItemName').innerText = item.name;
     document.getElementById('viewItemCategory').innerText = item.category;
     document.getElementById('viewItemQuantity').innerText = item.quantity;
@@ -249,9 +257,37 @@ async function openViewModal(itemId) {
   }
 }
 
+function searchItems() {
+    // Get the search query
+    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
 
-</script>
-<script>
+    // Get all the table rows
+    const rows = document.querySelectorAll('#itemTableBody tr.item');
+    let hasResults = false;
+
+    // Loop through each row and hide those that don't match the search query
+    rows.forEach(row => {
+        const itemName = row.querySelector('.item-name').innerText.toLowerCase();
+        const itemCategory = row.querySelector('.item-category').innerText.toLowerCase();
+        const itemDescription = row.querySelector('.item-description').innerText.toLowerCase();
+
+        if (itemName.includes(searchQuery) || itemCategory.includes(searchQuery) || itemDescription.includes(searchQuery)) {
+            row.style.display = ''; // Show row
+            hasResults = true;
+        } else {
+            row.style.display = 'none'; // Hide row
+        }
+    });
+
+    // Show the "No data found" message if no results are found
+    const noDataRow = document.getElementById('noDataRow');
+    if (!hasResults) {
+        noDataRow.style.display = ''; // Show "No data found" row
+    } else {
+        noDataRow.style.display = 'none'; // Hide "No data found" row
+    }
+}
+
   function confirmDelete() {
     return confirm('Are you sure you want to delete this item?');
   }
