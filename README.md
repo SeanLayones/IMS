@@ -4,6 +4,7 @@
 
 ### Project Title: Inventory Management System (IMS)
 
+# Developed by Sean Jerome A. Layones
 ---
 
 ## Table of Contents
@@ -11,11 +12,7 @@
 - [Features](#features)
 - [Technologies Used](#technologies-used)
 - [Setup and Installation](#setup-and-installation)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Contributors](#contributors)
-- [License](#license)
-
+  
 ---
 
 ## Project Overview
@@ -54,5 +51,5 @@ The **Inventory Management System (IMS)** is a web application designed to strea
 ### Steps:
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/IMS.git
+   git clone https://github.com/SeanLayones/IMS.git
    cd IMS
