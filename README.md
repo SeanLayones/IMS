@@ -4,7 +4,7 @@
 
 ### Project Title: Inventory Management System (IMS)
 
-# Developed by Sean Jerome A. Layones
+##### Developed by Sean Jerome A. Layones
 ---
 
 ## Table of Contents
