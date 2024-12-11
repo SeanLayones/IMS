@@ -18,9 +18,12 @@ mongoose.connect('mongodb://127.0.0.1:27017/inventoryDB', {
   .catch(err => console.log(err));
 
 // Routes
-app.use('/items', itemRoutes);
+app.use('/', itemRoutes);
 
 // Start Server
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
 });
+
+
+

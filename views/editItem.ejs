@@ -1,9 +1,39 @@
-<h1>Edit Item</h1>
-<form action="/items/edit/<%= item._id %>" method="POST">
-  <input type="text" name="name" value="<%= item.name %>" required />
-  <input type="text" name="category" value="<%= item.category %>" required />
-  <input type="number" name="quantity" value="<%= item.quantity %>" required />
-  <input type="number" name="price" value="<%= item.price %>" required />
-  <textarea name="description"><%= item.description %></textarea>
-  <button type="submit">Update Item</button>
-</form>
+<!-- Modal for Editing Item -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Item</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editItemForm" method="POST">
+          <div class="mb-3">
+            <label for="itemName" class="form-label">Name</label>
+            <input type="text" name="name" id="itemName" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="itemCategory" class="form-label">Category</label>
+            <input type="text" name="category" id="itemCategory" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="itemQuantity" class="form-label">Quantity</label>
+            <input type="number" name="quantity" id="itemQuantity" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="itemPrice" class="form-label">Price</label>
+            <input type="number" name="price" id="itemPrice" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="itemDescription" class="form-label">Description</label>
+            <textarea name="description" id="itemDescription" class="form-control"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Update Item</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

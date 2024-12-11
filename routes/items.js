@@ -14,9 +14,29 @@ router.get('/add', (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-  await Item.create(req.body);
-  res.redirect('/items');
+  try {
+    await Item.create(req.body); 
+    res.redirect('/#items');
+  } catch (error) {
+    console.error('Error adding item:', error);
+    res.status(500).send('Failed to add item.');
+  }
 });
+
+// View Item (GET route)
+router.get('/view/:id', async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
+    res.json(item); // Return item data as JSON
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch item details' });
+  }
+});
+
 
 // Edit item (GET and POST)
 router.get('/edit/:id', async (req, res) => {
@@ -26,13 +46,13 @@ router.get('/edit/:id', async (req, res) => {
 
 router.post('/edit/:id', async (req, res) => {
   await Item.findByIdAndUpdate(req.params.id, req.body);
-  res.redirect('/items#items');
+  res.redirect('/#items');
 });
 
 // Delete item
 router.post('/delete/:id', async (req, res) => {
   await Item.findByIdAndDelete(req.params.id);
-  res.redirect('/items');
+  res.redirect('/#items');
 });
 
 module.exports = router;

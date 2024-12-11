@@ -1,9 +1,38 @@
-<h1>Add Item</h1>
-<form action="/items/add" method="POST">
-  <input type="text" name="name" placeholder="Name" required />
-  <input type="text" name="category" placeholder="Category" required />
-  <input type="number" name="quantity" placeholder="Quantity" required />
-  <input type="number" name="price" placeholder="Price" required />
-  <textarea name="description" placeholder="Description"></textarea>
-  <button type="submit">Add Item</button>
-</form>
+<div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addItemModalLabel">Add New Item</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addItemModalForm" action="/add" method="POST">
+          <div class="mb-3">
+            <label for="addItemName" class="form-label">Name</label>
+            <input type="text" name="name" id="addItemName" class="form-control" placeholder="Enter name" required />
+          </div>
+          <div class="mb-3">
+            <label for="addItemCategory" class="form-label">Category</label>
+            <input type="text" name="category" id="addItemCategory" class="form-control" placeholder="Enter category" required />
+          </div>
+          <div class="mb-3">
+            <label for="addItemQuantity" class="form-label">Quantity</label>
+            <input type="number" name="quantity" id="addItemQuantity" class="form-control" placeholder="Enter quantity" required />
+          </div>
+          <div class="mb-3">
+            <label for="addItemPrice" class="form-label">Price</label>
+            <input type="number" name="price" id="addItemPrice" class="form-control" placeholder="Enter price" required />
+          </div>
+          <div class="mb-3">
+            <label for="addItemDescription" class="form-label">Description</label>
+            <textarea name="description" id="addItemDescription" class="form-control" placeholder="Enter description"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Add Item</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
